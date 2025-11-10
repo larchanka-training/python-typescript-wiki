@@ -5,5 +5,6 @@
 Команда запуска:
 
 ```bash
-docker-compose up -d
+chmod +x start-services.sh
+./start-services.sh 
 ```
