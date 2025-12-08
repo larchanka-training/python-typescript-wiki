@@ -15,6 +15,6 @@ docker exec -d $API_CONTAINER bash -c "pip install --no-cache-dir --upgrade -r r
 # Фронтенд
 FRONTEND_CONTAINER=$(docker ps -q -f name=frontend-1)
 echo "🧠 Устанавливаю зависимости и запускаю Фронтенд..."
-docker exec -d $FRONTEND_CONTAINER bash -c "cd /home/app && npm install && npm run dev --host 0.0.0"
+docker exec -d $FRONTEND_CONTAINER bash -c "cd /home/app && npm install && npm run dev"
 
 echo "✅ Фронтенд и API-Бэкенд запущены!"
