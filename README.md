@@ -61,7 +61,16 @@
 
 В корне проекта выполните:
 
-`chmod +x start-services.sh ./start-services.sh`
+```
+chmod +x start-services.sh
+./start-services.sh
+```
+
+## Остановка сервисов
+
+Для остановки всех сервисов в корне проекта выполните:
+
+`docker compose down`
 
 ---
 
