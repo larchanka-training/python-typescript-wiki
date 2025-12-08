@@ -17,7 +17,7 @@
 Используются для:
 - корректной работы cookies (особенно **SameSite**, secure cookies),
 - корректной работы OAuth / redirect-URL,
-- настройки reverse-proxy через виртуальные хосты,
+- настройки [reverse-proxy](https://github.com/larchanka-training/ecto-1-kb/blob/main/Документация/Локальный%20запуск/Прокси.md) через виртуальные хосты,
 - эмуляции production-инфраструктуры.
 
 ### HTTPS даже локально
