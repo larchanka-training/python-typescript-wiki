@@ -70,7 +70,7 @@ chmod +x start-services.sh
 
 Для остановки всех сервисов в корне проекта выполните:
 
-`docker compose down`
+`docker-compose down`
 
 ---
 
