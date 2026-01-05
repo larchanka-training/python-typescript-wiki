@@ -9,16 +9,15 @@ databases:
   - name: wiki-db
     databaseName: wiki
     user: admin
-    plan: free # Change to a paid plan for production use
+    plan: free
 services:
   # API Service
   - type: web
     name: wiki-api
-    env: docker
-    dockerContext: api
-    dockerFile: Dockerfile
+    env: python
+    rootDir: api
     plan: free
-    region: oregon # Or your preferred region
+    region: frankfurt
     envVars:
       - fromGroup: wiki-secrets
       - key: DATABASE_URL
@@ -29,23 +28,17 @@ services:
         value: 86400
       - key: SESSION_TTL_SECONDS
         value: 604800
-    dockerCommand: >
-      sh -c "alembic upgrade head &&
-             fastapi run app/main.py --host 0.0.0.0 --port 8000"
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
 
-  # Frontend Service
-  - type: web
+  # Frontend Service (Static Site for Vite app)
+  - type: static
     name: wiki-frontend
-    env: docker
-    dockerContext: frontend
-    dockerFile: Dockerfile
-    plan: free
-    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishPath: dist
     envVars:
       - key: VITE_API_URL
         fromStack:
           service: wiki-api
           property: url
-    dockerCommand: >
-      sh -c "npm install && npm run dev"
-    healthCheckPath: /
