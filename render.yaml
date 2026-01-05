@@ -1,0 +1,54 @@
+envGroups:
+  - name: wiki-secrets
+    envVars:
+      - key: OAUTH_NAME_APPLICATION_ID
+        sync: false
+      - key: OAUTH_NAME_SECRET_KEY
+        sync: false
+
+services:
+  # Managed PostgreSQL instance
+  - type: database
+    name: wiki-db
+    databaseName: wiki
+    user: admin
+    plan: free # Change to a paid plan for production use
+
+  # API Service
+  - type: web
+    name: wiki-api
+    env: docker
+    dockerContext: api
+    dockerFilePath: Dockerfile
+    plan: free
+    region: oregon # Or your preferred region
+    envVars:
+      - fromGroup: wiki-secrets
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wiki-db
+          property: connectionString
+      - key: TOKEN_TTL_SECONDS
+        value: 86400
+      - key: SESSION_TTL_SECONDS
+        value: 604800
+    dockerCommand: >
+      sh -c "alembic upgrade head &&
+             fastapi run app/main.py --host 0.0.0.0 --port 8000"
+
+  # Frontend Service
+  - type: web
+    name: wiki-frontend
+    env: docker
+    dockerContext: frontend
+    dockerFilePath: Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: VITE_API_URL
+        fromStack:
+          service: wiki-api
+          property: url
+    dockerCommand: >
+      sh -c "npm install && npm run dev"
+    healthCheckPath: /
