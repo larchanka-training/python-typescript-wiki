@@ -42,6 +42,4 @@ services:
     startCommand: npm run dev
     envVars:
       - key: VITE_API_URL
-        fromStack:
-          service: wiki-api
-          property: url
+        value: /api
