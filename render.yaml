@@ -5,15 +5,12 @@ envGroups:
         sync: false
       - key: OAUTH_NAME_SECRET_KEY
         sync: false
-
-services:
-  # Managed PostgreSQL instance
-  - type: database
-    name: wiki-db
+databases:
+  - name: wiki-db
     databaseName: wiki
     user: admin
     plan: free # Change to a paid plan for production use
-
+services:
   # API Service
   - type: web
     name: wiki-api
