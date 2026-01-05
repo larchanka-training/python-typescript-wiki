@@ -16,7 +16,7 @@ services:
     name: wiki-api
     env: docker
     dockerContext: api
-    dockerFilePath: Dockerfile
+    dockerFile: Dockerfile
     plan: free
     region: oregon # Or your preferred region
     envVars:
@@ -38,7 +38,7 @@ services:
     name: wiki-frontend
     env: docker
     dockerContext: frontend
-    dockerFilePath: Dockerfile
+    dockerFile: Dockerfile
     plan: free
     region: oregon
     envVars:
