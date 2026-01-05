@@ -1,4 +1,4 @@
-envGroups:
+envVarGroups:
   - name: wiki-secrets
     envVars:
       - key: OAUTH_NAME_APPLICATION_ID
