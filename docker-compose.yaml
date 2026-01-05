@@ -8,8 +8,11 @@ services:
     volumes:
       - ./frontend:/home/app
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     stdin_open: true
+    command: >
+      sh -c "cd /home/app && npm install && npm run dev"
 
   api:
     build:
@@ -19,20 +22,35 @@ services:
       - "8000:8000"
     volumes:
       - ./api:/app
+    environment:
+      DATABASE_URL: postgresql://admin:admin123@postgres:5432/wiki
+      OAUTH_NAME_APPLICATION_ID: ${OAUTH_NAME_APPLICATION_ID:-local-app}
+      OAUTH_NAME_SECRET_KEY: ${OAUTH_NAME_SECRET_KEY:-local-secret}
+      TOKEN_TTL_SECONDS: ${TOKEN_TTL_SECONDS:-86400}
+      SESSION_TTL_SECONDS: ${SESSION_TTL_SECONDS:-604800}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     stdin_open: true
+    command: >
+      sh -c "alembic upgrade head &&
+             fastapi dev app/main.py --host 0.0.0.0 --port 8000"
 
   postgres:
     image: postgres:16
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - psql-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin123
-      - POSTGRES_DB=wiki
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: wiki
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d wiki" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   pgadmin:
     image: dpage/pgadmin4
@@ -40,7 +58,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin123
-      
+
       PGADMIN_SETUP_SERVER_GROUP: Docker_Servers
       PGADMIN_SETUP_SERVER_NAME: Postgres_DB
       PGADMIN_SETUP_SERVER_HOST: postgres
@@ -67,5 +85,5 @@ services:
     restart: always
 
 volumes:
-  db-data:
+  psql-data:
   pgadmin-data:
