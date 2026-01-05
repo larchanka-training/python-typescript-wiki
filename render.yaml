@@ -36,7 +36,10 @@ services:
     runtime: node
     name: wiki-frontend
     rootDir: frontend
-    buildCommand: npm install && npm run dev
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm run dev
     envVars:
       - key: VITE_API_URL
         fromStack:
