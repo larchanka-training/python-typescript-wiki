@@ -8,6 +8,7 @@ envVarGroups:
 databases:
   - name: wiki-db
     databaseName: wiki
+    region: frankfurt
     user: admin
     plan: free
 services:
