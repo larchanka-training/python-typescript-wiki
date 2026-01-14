@@ -15,7 +15,7 @@ services:
   - type: web
     name: wiki-api
     runtime: python
-    rootDir: api
+    rootDir: ./api
     plan: free
     region: frankfurt
     envVars:
@@ -28,17 +28,17 @@ services:
         value: 86400
       - key: SESSION_TTL_SECONDS
         value: 604800
-    buildCommand: ls && cd api && pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
 
-  # Frontend Service (Static Site for Vite app)
+  # Frontend Service
   - type: web
     runtime: node
     name: wiki-frontend
-    rootDir: frontend
+    rootDir: ./frontend
     plan: free
     region: frankfurt
-    buildCommand: ls && cd frontend && npm install
+    buildCommand: frontend && npm install
     startCommand: cd frontend && npm run dev
     envVars:
       - key: VITE_API_URL
