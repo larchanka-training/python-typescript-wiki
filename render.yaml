@@ -39,7 +39,7 @@ services:
     rootDir: ./frontend
     plan: free
     region: frankfurt
-    buildCommand: npm install
+    buildCommand: ls && npm install
     startCommand: npm run dev
     envVars:
       - key: VITE_API_URL
