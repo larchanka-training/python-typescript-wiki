@@ -16,7 +16,6 @@ services:
   - type: web
     name: wiki-api
     runtime: python
-    rootDir: api
     plan: free
     region: frankfurt
     envVars:
@@ -29,8 +28,8 @@ services:
         value: 86400
       - key: SESSION_TTL_SECONDS
         value: 604800
-    buildCommand: pip install -r requirements.txt
-    startCommand: alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
+    buildCommand: cd api && pip install -r requirements.txt
+    startCommand: cd api && alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
 
   # Frontend Service
   - type: web
