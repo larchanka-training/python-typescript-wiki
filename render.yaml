@@ -39,8 +39,8 @@ services:
     rootDir: frontend
     plan: free
     region: frankfurt
-    buildCommand: npm install
-    startCommand: npm run dev
+    buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
+    startCommand: cd ./frontend && npm run dev
     envVars:
       - key: VITE_API_URL
         value: /api
