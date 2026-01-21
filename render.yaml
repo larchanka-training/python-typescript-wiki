@@ -29,8 +29,8 @@ services:
         value: 86400
       - key: SESSION_TTL_SECONDS
         value: 604800
-    buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./api && ls && pip install -r requirements.txt
-    startCommand: alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
+    buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./api && pip install -r requirements.txt
+    startCommand: cd ./api && alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000
 
   # Frontend Service
   - type: web
