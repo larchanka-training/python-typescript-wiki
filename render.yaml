@@ -43,4 +43,4 @@ services:
     startCommand: cd ./frontend && npm run dev
     envVars:
       - key: VITE_API_URL
-        value: /api
+        value: https://wiki-api-0ouk.onrender.com
