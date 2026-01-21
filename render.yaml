@@ -44,3 +44,5 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://wiki-api-0ouk.onrender.com
+      - key: PORT
+        value: 10000
