@@ -9,7 +9,7 @@ services:
   - type: web
     name: wiki-api
     runtime: python
-    rootDir: api
+    # rootDir: api
     plan: free
     region: frankfurt
     envVars:
@@ -29,7 +29,7 @@ services:
   - type: web
     runtime: node
     name: wiki-frontend
-    rootDir: frontend
+    # rootDir: frontend
     plan: free
     region: frankfurt
     buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
