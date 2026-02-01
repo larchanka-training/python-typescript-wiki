@@ -1,10 +1,3 @@
-envVarGroups:
-  - name: wiki-secrets
-    envVars:
-      - key: OAUTH_NAME_APPLICATION_ID
-        sync: false
-      - key: OAUTH_NAME_SECRET_KEY
-        sync: false
 databases:
   - name: wiki-db
     databaseName: wiki
@@ -20,7 +13,7 @@ services:
     plan: free
     region: frankfurt
     envVars:
-      - fromGroup: wiki-secrets
+      - fromGroup: wiki-secrets-dev
       - key: DATABASE_URL
         fromDatabase:
           name: wiki-db
@@ -42,5 +35,4 @@ services:
     buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
     startCommand: cd ./frontend && npm run dev
     envVars:
-      - key: VITE_API_URL
-        value: https://wiki-api-0ouk.onrender.com
+      - fromGroup: wiki-secrets-dev
