@@ -17,7 +17,7 @@ projects:
             region: frankfurt
             branch: develop
             envVars:
-              - fromGroup: wiki-secrets-dev
+              - fromGroup: wiki-secrets
               - key: DATABASE_URL
                 fromDatabase:
                   name: wiki-db-dev
@@ -39,7 +39,47 @@ projects:
             buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
             startCommand: cd ./frontend && npm run dev
             envVars:
-              - fromGroup: wiki-secrets-dev
+              - fromGroup: wiki-secrets
+
+      - name: acceptance
+        databases:
+          - name: wiki-db-acc
+            databaseName: wiki
+            region: frankfurt
+            user: admin
+            plan: basic-1gb
+        services:
+          # API Service
+          - type: web
+            name: wiki-api-acc
+            runtime: python
+            plan: free
+            region: frankfurt
+            branch: main
+            envVars:
+              - fromGroup: wiki-secrets
+              - key: DATABASE_URL
+                fromDatabase:
+                  name: wiki-db-acc
+                  property: connectionString
+              - key: TOKEN_TTL_SECONDS
+                value: 86400
+              - key: SESSION_TTL_SECONDS
+                value: 604800
+            buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./api && pip install -r requirements.txt
+            startCommand: cd ./api && alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 10000
+
+          # Frontend Service
+          - type: web
+            runtime: node
+            name: wiki-frontend-acc
+            branch: main
+            plan: free
+            region: frankfurt
+            buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
+            startCommand: cd ./frontend && npm run dev
+            envVars:
+              - fromGroup: wiki-secrets
 
       - name: production
         databases:
@@ -57,7 +97,7 @@ projects:
             region: frankfurt
             branch: main
             envVars:
-              - fromGroup: wiki-secrets-prd
+              - fromGroup: wiki-secrets
               - key: DATABASE_URL
                 fromDatabase:
                   name: wiki-db-prd
@@ -79,4 +119,4 @@ projects:
             buildCommand: git config --global url."https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com".insteadOf "https://github.com" && git submodule update --init --recursive && cd ./frontend && npm install
             startCommand: cd ./frontend && npm run dev
             envVars:
-              - fromGroup: wiki-secrets-prd
+              - fromGroup: wiki-secrets
