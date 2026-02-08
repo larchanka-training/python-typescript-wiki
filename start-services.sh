@@ -7,7 +7,7 @@ docker-compose up -d
 echo "⏳ Инициализирую контейнеры..."
 sleep 15
 
-Бэкенд (API)
+# Бэкенд (API)
 API_CONTAINER=$(docker ps -q -f name=api-1)
 echo "🐍 Устанавливаю зависимости и запускаю Бэкенд..."
 docker exec -d $API_CONTAINER bash -c "pip install --no-cache-dir --upgrade -r requirements.txt && fastapi dev app/main.py --host 0.0.0.0"
