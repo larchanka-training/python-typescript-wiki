@@ -7,7 +7,7 @@ projects:
             databaseName: wiki
             region: frankfurt
             user: admin
-            plan: basic-1gb
+            plan: free
         services:
           # API Service
           - type: web
@@ -47,7 +47,7 @@ projects:
             databaseName: wiki
             region: frankfurt
             user: admin
-            plan: basic-1gb
+            plan: free
         services:
           # API Service
           - type: web
